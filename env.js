@@ -5,7 +5,11 @@ module.exports = {
   buildsDir: "builds",
   migrationsDir: "migrations",
   contractsDir: "contracts/main",
-  ligoVersion: "0.29.0",
+  compiler: {
+    version: "0.35.0",
+    michelsonFormat: "json",
+    protocol: "hangzhou"
+  },
   networks: {
     development: {
       rpc: "http://localhost:8732",

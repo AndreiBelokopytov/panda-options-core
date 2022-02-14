@@ -5,39 +5,13 @@ const fs = require("fs");
 const { TezosToolkit } = require("@taquito/taquito");
 const { InMemorySigner } = require("@taquito/signer");
 const { confirmOperation } = require("./confirmation");
+const unparse = require('yargs-unparser');
 const env = require("../env");
-
-const getLigo = isDockerizedLigo => {
-  let path = "ligo";
-
-  if (isDockerizedLigo) {
-    path = `docker run -v $PWD:$PWD --rm -i ligolang/ligo:${env.ligoVersion}`;
-
-    try {
-      execSync(`${path}  --help`);
-    } catch (err) {
-      path = "ligo";
-
-      execSync(`${path}  --help`);
-    }
-  } else {
-    try {
-      execSync(`${path}  --help`);
-    } catch (err) {
-      path = `docker run -v $PWD:$PWD --rm -i ligolang/ligo:${env.ligoVersion}`;
-
-      execSync(`${path}  --help`);
-    }
-  }
-
-  return path;
-};
 
 const getContractsList = () => {
   return fs
     .readdirSync(env.contractsDir)
-    .filter(file => file.endsWith(".ligo"))
-    .map(file => file.slice(0, file.length - 5));
+    .filter(file => /\.(re|m|js)?ligo$/.test(file));
 };
 
 const getMigrationsList = () => {
@@ -47,27 +21,31 @@ const getMigrationsList = () => {
     .map(file => file.slice(0, file.length - 3));
 };
 
-const compile = async (contract, format) => {
-  const ligo = getLigo(true);
-  format = format || "json";
+const compile = async (contract) => {
   const contracts = !contract ? getContractsList() : [contract];
+  const { michelsonFormat, syntax, protocol, version: compilerVersion } = env.compiler
+  const ligoArguments = unparse({
+    "michelson-format": michelsonFormat,
+    syntax,
+    protocol
+  }).filter(el => el !== undefined);
   contracts.forEach(contract => {
     let michelson;
     try {
       michelson = execSync(
-        `${ligo} compile contract $PWD/${env.contractsDir}/${contract}.ligo -s pascaligo --michelson-format ${format} --protocol hangzhou`,
+        `ligo compile contract $PWD/${env.contractsDir}/${contract} ${ligoArguments.join(" ")}`,
         { maxBuffer: 1024 * 4000 },
       ).toString();
     } catch (e) {
       console.log(e);
     }
 
-    if (format == "json") {
+    if (michelsonFormat == "json") {
       const artifacts = JSON.stringify(
         {
           michelson: JSON.parse(michelson),
           networks: {},
-          compiler: "ligo:" + env.ligoVersion,
+          compiler: "ligo:" + compilerVersion,
         },
         null,
         2,
@@ -145,7 +123,6 @@ const runMigrations = async options => {
 };
 
 module.exports = {
-  getLigo,
   getContractsList,
   getMigrationsList,
   compile,

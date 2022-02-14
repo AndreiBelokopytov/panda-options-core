@@ -14,15 +14,15 @@
   },
   "homepage": "https://github.com/repo#readme",
   "engines": {
-    "node": "^14.17.1",
-    "yarn": "^1.22.10"
+    "node": "^16.4.0"
   },
   "dependencies": {
     "@taquito/signer": "^9.1.1",
     "@taquito/taquito": "^9.2.0",
     "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
-    "yargs": "^17.0.1"
+    "yargs": "^17.0.1",
+    "yargs-unparser": "^2.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.18",
@@ -33,9 +33,9 @@
   "scripts": {
     "clean": "rm -rf ./builds/",
     "migrate": "node scripts/cli.js migrate",
-    "compile": "yarn clean && node scripts/cli.js compile",
     "start-sandbox": "docker run --rm --name dev-sandbox -e flextesa_node_cors_origin='*' -e block_time=1 --detach -p 8732:20000 tqtezos/flextesa:20211119 hangzbox start",
     "stop-sandbox": "docker kill dev-sandbox",
+    "compile": "npm run clean && node scripts/cli.js compile",
     "test": "mocha 'tests/*.js' --timeout 150000"
   },
   "target": "ES6"
