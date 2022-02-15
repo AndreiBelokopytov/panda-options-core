@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  contracts:
+    build:
+      context: .
+      args:
+        - VARIANT=16
+    volumes:
+      - ..:/workspace:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  flextesa:
+    image: oxheadalpha/flextesa:latest
+    command: /bin/sh -c "hangzbox start"
+    environment:
+      - block_time=2

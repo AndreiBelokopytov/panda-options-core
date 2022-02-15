@@ -2,14 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.217.4/containers/javascript-node
 {
 	"name": "Node.js",
-	"build": {
-		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 16, 14, 12.
-		// Append -bullseye or -buster to pin to an OS version.
-		// Use -bullseye variants on local arm64/Apple Silicon.
-		"args": { "VARIANT": "16" }
-	},
-
+	"dockerComposeFile": "docker-compose.yml",
 	// Set *default* container specific settings.json values on container create.
 	"settings": {},
 
@@ -30,5 +23,8 @@
 	"remoteUser": "node",
 	"features": {
 		"git": "latest"
-	}
+	},
+	"service": "contracts",
+	"workspaceFolder": "/workspace",
+	"shutdownAction": "stopCompose"
 }

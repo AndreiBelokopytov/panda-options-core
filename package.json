@@ -33,8 +33,6 @@
   "scripts": {
     "clean": "rm -rf ./builds/",
     "migrate": "node scripts/cli.js migrate",
-    "start-sandbox": "docker run --rm --name dev-sandbox -e flextesa_node_cors_origin='*' -e block_time=1 --detach -p 8732:20000 tqtezos/flextesa:20211119 hangzbox start",
-    "stop-sandbox": "docker kill dev-sandbox",
     "compile": "npm run clean && node scripts/cli.js compile",
     "test": "mocha 'tests/*.js' --timeout 150000"
   },
