@@ -14,47 +14,39 @@ Edit for yourself:
 
 # Requirements
 
-- Installed NodeJS (tested with NodeJS v14+)
-- Installed Yarn
+- Installed NodeJS (v14+)
+- Installed Docker (v20.10+)
+- Installed VSCode with Remote - Containers extension [https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-- Installed node modules:
+# Setup
+Use "Open Folder in Container..." command from VSCode command palette.
 
-```
-yarn install
-
-```
+![Remote Conainers commands](https://microsoft.github.io/vscode-remote-release/images/remote-command-palette.png)
 
 # Quick Start tests
 
 ```
-yarn start-sandbox
-
+npm test
 ```
 
+# Compile contracts
 
 ```
-yarn test
-
-``` 
-
-![image](https://user-images.githubusercontent.com/44075582/126524242-6fdd8cf3-a5b5-4143-b46f-97eb7a0a2e73.png)
-
-
-```
-yarn stop-sandbox
-
+npm run compile
 ```
 
-# Compile contract
+# Compile single contract
 
 ```
-yarn compile
-
+npm run compile example.ligo
 ```
 
 # Deploy contract
 
 ```
-yarn migrate
-
+npm run migrate --network localhost
 ```
+Possible networks are:
+* localhost
+* testnet (Hangzhou)
+* mainnet
