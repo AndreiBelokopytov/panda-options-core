@@ -8,6 +8,13 @@ const { confirmOperation } = require("./confirmation");
 const unparse = require('yargs-unparser');
 const env = require("../env");
 
+const getFileNameParts = fileName => {
+  const dotIndex = fileName.lastIndexOf(".");
+  const name = fileName.slice(0, dotIndex);
+  const extension = fileName.slice(dotIndex + 1);
+  return [name, extension];
+}
+
 const getContractsList = () => {
   return fs
     .readdirSync(env.contractsDir)
@@ -30,6 +37,7 @@ const compile = async (contract) => {
     protocol
   }).filter(el => el !== undefined);
   contracts.forEach(contract => {
+    const [contractName] = getFileNameParts(contract);
     let michelson;
     try {
       michelson = execSync(
@@ -53,9 +61,9 @@ const compile = async (contract) => {
       if (!fs.existsSync(env.buildsDir)) {
         fs.mkdirSync(env.buildsDir);
       }
-      fs.writeFileSync(`${env.buildsDir}/${contract}.json`, artifacts);
+      fs.writeFileSync(`${env.buildsDir}/${contractName}.json`, artifacts);
     } else {
-      fs.writeFileSync(`${env.contractsDir}/${contract}.tz`, michelson);
+      fs.writeFileSync(`${env.contractsDir}/${contractName}.tz`, michelson);
     }
   });
 };
