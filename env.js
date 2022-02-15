@@ -11,12 +11,12 @@ module.exports = {
     protocol: "hangzhou"
   },
   networks: {
-    development: {
-      rpc: "http://localhost:8732",
+    localhost: {
+      rpc: "http://flextesa:20000",
       network_id: "*",
       secretKey: alice.sk,
     },
-    hangzhounet: {
+    testnet: {
       rpc: "https://hangzhounet.api.tez.ie/",
       port: 443,
       network_id: "*",

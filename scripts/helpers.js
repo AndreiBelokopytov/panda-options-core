@@ -103,11 +103,11 @@ const migrate = async (tezos, contract, storage) => {
   }
 };
 
-const runMigrations = async options => {
+const runMigrations = async argv => {
   try {
     const migrations = getMigrationsList();
 
-    const network = env.network;
+    const network = argv.network;
 
     const networkConfig = env.networks[network];
 

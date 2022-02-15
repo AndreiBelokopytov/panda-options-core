@@ -5,7 +5,7 @@ const { alice } = require("../../scripts/sandbox/accounts");
 const { bob } = require("../../scripts/sandbox/accounts");
 
 const env = require("../../env");
-const networkConfig = env.networks.development;
+const networkConfig = env.networks.localhost;
 
 const rpc = networkConfig.rpc;
 const Tezos = new TezosToolkit(rpc);
