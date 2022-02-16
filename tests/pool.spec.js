@@ -7,7 +7,7 @@ describe("Pool contract test", async function () {
 
   before(async () => {
     Tezos.setSignerProvider(signerAlice);
-    const storage = require("./storage/pool_initial_storage");
+    const storage = require("./storage/pool_test_storage");
 
     const deployedContract = await deploy(Tezos, "pool", {init: storage});
     contract = await Tezos.contract.at(deployedContract);
