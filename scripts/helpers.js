@@ -69,6 +69,7 @@ const compile = async (contract) => {
 };
 
 const deployToNetwork = network => async (tezos, contract, props) => {
+  const isLocalNetwork = network === "localhost";
   const artifacts = JSON.parse(
     fs.readFileSync(`${env.buildsDir}/${contract}.json`),
   );
@@ -80,14 +81,16 @@ const deployToNetwork = network => async (tezos, contract, props) => {
   await confirmOperation(tezos, operation.hash);
   artifacts.networks[network] = { [contract]: operation.contractAddress };
 
-  if (!fs.existsSync(env.buildsDir)) {
-    fs.mkdirSync(env.buildsDir);
-  }
+  if (!isLocalNetwork) {
+    if (!fs.existsSync(env.buildsDir)) {
+      fs.mkdirSync(env.buildsDir);
+    }
 
-  fs.writeFileSync(
-    `${env.buildsDir}/${contract}.json`,
-    JSON.stringify(artifacts, null, 2),
-  );
+    fs.writeFileSync(
+      `${env.buildsDir}/${contract}.json`,
+      JSON.stringify(artifacts, null, 2),
+    );
+  }
 
   return operation.contractAddress;
 };

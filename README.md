@@ -48,5 +48,7 @@ npm run migrate --network localhost
 ```
 Possible networks are:
 * localhost
-* testnet (Hangzhou)
+* hangzhounet
 * mainnet
+
+`--network` argument is optional, default value is `localhost`
