@@ -112,7 +112,7 @@ const runMigrations = async argv => {
     for (const migration of migrations) {
       const execMigration = require(`../${env.migrationsDir}/${migration}.js`);
 
-      await execMigration(tezos);
+      await execMigration(tezos, network);
     }
   } catch (e) {
     console.error(e);
