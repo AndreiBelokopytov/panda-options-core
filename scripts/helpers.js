@@ -68,39 +68,28 @@ const compile = async (contract) => {
   });
 };
 
-const migrate = async (tezos, contract, storage) => {
-  try {
-    const artifacts = JSON.parse(
-      fs.readFileSync(`${env.buildsDir}/${contract}.json`),
-    );
-    const operation = await tezos.contract
-      .originate({
-        code: artifacts.michelson,
-        storage: storage,
-      })
-      .catch(e => {
-        console.error(JSON.stringify(e));
+const deployToNetwork = network => async (tezos, contract, props) => {
+  const artifacts = JSON.parse(
+    fs.readFileSync(`${env.buildsDir}/${contract}.json`),
+  );
+  const operation = await tezos.contract
+    .originate({
+      code: artifacts.michelson,
+      ...props,
+    })
+  await confirmOperation(tezos, operation.hash);
+  artifacts.networks[network] = { [contract]: operation.contractAddress };
 
-        return { contractAddress: null };
-      });
-
-    await confirmOperation(tezos, operation.hash);
-
-    artifacts.networks[env.network] = { [contract]: operation.contractAddress };
-
-    if (!fs.existsSync(env.buildsDir)) {
-      fs.mkdirSync(env.buildsDir);
-    }
-
-    fs.writeFileSync(
-      `${env.buildsDir}/${contract}.json`,
-      JSON.stringify(artifacts, null, 2),
-    );
-
-    return operation.contractAddress;
-  } catch (e) {
-    console.error(e);
+  if (!fs.existsSync(env.buildsDir)) {
+    fs.mkdirSync(env.buildsDir);
   }
+
+  fs.writeFileSync(
+    `${env.buildsDir}/${contract}.json`,
+    JSON.stringify(artifacts, null, 2),
+  );
+
+  return operation.contractAddress;
 };
 
 const runMigrations = async argv => {
@@ -134,7 +123,7 @@ module.exports = {
   getContractsList,
   getMigrationsList,
   compile,
-  migrate,
+  deployToNetwork,
   runMigrations,
   env,
 };

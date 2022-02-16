@@ -1,8 +1,5 @@
-const { Tezos, signerAlice, signerBob } = require("./utils/cli");
-const { migrate } = require("../scripts/helpers");
-const { rejects, strictEqual, notStrictEqual } = require("assert");
-
-const { alice } = require("../scripts/sandbox/accounts");
+const { Tezos, signerAlice, deploy } = require("./utils/cli");
+const { rejects, strictEqual } = require("assert");
 
 describe("Example test", async function () {
   let contract;
@@ -12,10 +9,10 @@ describe("Example test", async function () {
       Tezos.setSignerProvider(signerAlice);
       const storage = require("./storage/storage");
 
-      const deployedContract = await migrate(
+      const deployedContract = await deploy(
         Tezos,
         "Example",
-        storage,
+        { storage },
       );
       contract = await Tezos.contract.at(deployedContract);
 

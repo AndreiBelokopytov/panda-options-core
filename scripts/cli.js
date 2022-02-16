@@ -33,6 +33,7 @@ const argv = yargs
         description: "the network to deploy",
         alias: "n",
         type: "string",
+        default: "localhost"
       },
     },
       async (argv) => {;
