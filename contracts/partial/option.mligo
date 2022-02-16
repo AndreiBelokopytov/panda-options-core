@@ -23,7 +23,7 @@ type option_info =
   state: option_state;
 }
 
-type option_constructor_params =
+type option_constructor_param =
 [@layout:comb]
 {
   strike: nat;
@@ -32,18 +32,24 @@ type option_constructor_params =
   kind: option_kind;
 }
 
+let min_option_period = 1n
+let max_option_period = 30n
+
 let get_next_option_id (current_id: option_id): option_id = current_id + 1n
 
-let create_option (params: option_constructor_params) (current_id: option_id): option_info =
+let create_option (param: option_constructor_param) (current_id: option_id): option_info option =
+  if param.period < min_option_period then None () else
+  if param.period > max_option_period then None () else
   let next_id = get_next_option_id current_id in
-  {
+  let option_info = {
     id = next_id;
-    strike = params.strike;
-    amount = params.amount;
-    expiration = Tezos.now + params.period * one_day;
-    kind = params.kind;
+    strike = param.strike;
+    amount = param.amount;
+    expiration = Tezos.now + param.period * one_day;
+    kind = param.kind;
     state = Active ()
-  }
+  } in
+  Some (option_info)
 
 let change_option_state (state: option_state) (option: option_info): option_info option =
   match option.state with

@@ -1,5 +1,5 @@
 const { Tezos, signerAlice, deploy } = require("./utils/cli");
-const { strictEqual, ok } = require("assert");
+const { strictEqual, ok, rejects } = require("assert");
 const { BigNumber } = require("bignumber.js")
 
 describe("Pool contract test", async function () {
@@ -33,6 +33,16 @@ describe("Pool contract test", async function () {
       ok(expectedAmount.isEqualTo(option.amount));
       strictEqual(new Date(option.expiration).getDate(), expiration.getDate());
       ok(option.state.active !== undefined);
+    });
+
+    it("should revert if the period is less than 1 day", async function () {
+      const invalidPeriod = 0;
+      await rejects(contract.methods.default(strike, amount, invalidPeriod).send())
+    });
+
+    it("should revert if the period is more than 30 days", async function () {
+      const invalidPeriod = 31;
+      await rejects(contract.methods.default(strike, amount, invalidPeriod).send())
     });
   });
 });
