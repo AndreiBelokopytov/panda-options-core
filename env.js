@@ -6,8 +6,6 @@ module.exports = {
   migrationsDir: "migrations",
   contractsDir: "contracts/main",
   compiler: {
-    version: "0.35.0",
-    michelsonFormat: "json",
     protocol: "hangzhou"
   },
   networks: {

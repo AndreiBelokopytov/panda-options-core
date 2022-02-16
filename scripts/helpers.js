@@ -30,12 +30,21 @@ const getMigrationsList = () => {
 
 const compile = async (contract) => {
   const contracts = !contract ? getContractsList() : [contract];
-  const { michelsonFormat, syntax, protocol, version: compilerVersion } = env.compiler
+  const { protocol, projectRoot } = env.compiler
   const ligoArguments = unparse({
-    "michelson-format": michelsonFormat,
-    syntax,
+    "michelson-format": "json",
+    "project-root": projectRoot,
     protocol
   }).filter(el => el !== undefined);
+
+  let compilerVersion;
+  try {
+    compilerVersion = execSync("ligo --version").toString();
+  } catch (err) {
+    console.log(err.message);
+    return;
+  }
+
   contracts.forEach(contract => {
     const [contractName] = getFileNameParts(contract);
     let michelson;
@@ -44,11 +53,7 @@ const compile = async (contract) => {
         `ligo compile contract $PWD/${env.contractsDir}/${contract} ${ligoArguments.join(" ")}`,
         { maxBuffer: 1024 * 4000 },
       ).toString();
-    } catch (e) {
-      console.log(e);
-    }
 
-    if (michelsonFormat == "json") {
       const artifacts = JSON.stringify(
         {
           michelson: JSON.parse(michelson),
@@ -62,8 +67,9 @@ const compile = async (contract) => {
         fs.mkdirSync(env.buildsDir);
       }
       fs.writeFileSync(`${env.buildsDir}/${contractName}.json`, artifacts);
-    } else {
-      fs.writeFileSync(`${env.contractsDir}/${contractName}.tz`, michelson);
+    } catch (err) {
+      console.log(err.message);
+      return;
     }
   });
 };
