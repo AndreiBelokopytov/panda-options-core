@@ -39,7 +39,7 @@ const compile = async (contract) => {
 
   let compilerVersion;
   try {
-    compilerVersion = execSync("ligo --version").toString();
+    compilerVersion = execSync("ligo --version").toString().trim();
   } catch (err) {
     console.log(err.message);
     return;
