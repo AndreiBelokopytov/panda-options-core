@@ -904,6 +904,10 @@
       ]
     }
   ],
-  "networks": {},
+  "networks": {
+    "hangzhounet": {
+      "pool": "KT19ykYkxhcKtzJtH9tRraAGhBV5d5doJ4Ui"
+    }
+  },
   "compiler": "ligo:0.36.0"
 }
