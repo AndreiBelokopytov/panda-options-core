@@ -7,7 +7,12 @@
           "prim": "pair",
           "args": [
             {
-              "prim": "nat",
+              "prim": "option",
+              "args": [
+                {
+                  "prim": "nat"
+                }
+              ],
               "annots": [
                 "%strike"
               ]
@@ -69,19 +74,13 @@
                   ]
                 },
                 {
-                  "prim": "big_map",
+                  "prim": "pair",
                   "args": [
                     {
-                      "prim": "nat"
-                    },
-                    {
-                      "prim": "pair",
+                      "prim": "big_map",
                       "args": [
                         {
-                          "prim": "nat",
-                          "annots": [
-                            "%id"
-                          ]
+                          "prim": "nat"
                         },
                         {
                           "prim": "pair",
@@ -89,7 +88,7 @@
                             {
                               "prim": "nat",
                               "annots": [
-                                "%strike"
+                                "%id"
                               ]
                             },
                             {
@@ -98,43 +97,29 @@
                                 {
                                   "prim": "nat",
                                   "annots": [
-                                    "%amount"
+                                    "%strike"
                                   ]
                                 },
                                 {
                                   "prim": "pair",
                                   "args": [
                                     {
-                                      "prim": "timestamp",
+                                      "prim": "nat",
                                       "annots": [
-                                        "%expiration"
+                                        "%amount"
                                       ]
                                     },
                                     {
                                       "prim": "pair",
                                       "args": [
                                         {
-                                          "prim": "or",
-                                          "args": [
-                                            {
-                                              "prim": "unit",
-                                              "annots": [
-                                                "%call"
-                                              ]
-                                            },
-                                            {
-                                              "prim": "unit",
-                                              "annots": [
-                                                "%put"
-                                              ]
-                                            }
-                                          ],
+                                          "prim": "timestamp",
                                           "annots": [
-                                            "%kind"
+                                            "%expiration"
                                           ]
                                         },
                                         {
-                                          "prim": "or",
+                                          "prim": "pair",
                                           "args": [
                                             {
                                               "prim": "or",
@@ -142,37 +127,62 @@
                                                 {
                                                   "prim": "unit",
                                                   "annots": [
-                                                    "%active"
+                                                    "%call"
                                                   ]
                                                 },
                                                 {
                                                   "prim": "unit",
                                                   "annots": [
-                                                    "%exercised"
+                                                    "%put"
                                                   ]
                                                 }
+                                              ],
+                                              "annots": [
+                                                "%kind"
                                               ]
                                             },
                                             {
                                               "prim": "or",
                                               "args": [
                                                 {
-                                                  "prim": "unit",
-                                                  "annots": [
-                                                    "%expired"
+                                                  "prim": "or",
+                                                  "args": [
+                                                    {
+                                                      "prim": "unit",
+                                                      "annots": [
+                                                        "%active"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "prim": "unit",
+                                                      "annots": [
+                                                        "%exercised"
+                                                      ]
+                                                    }
                                                   ]
                                                 },
                                                 {
-                                                  "prim": "unit",
-                                                  "annots": [
-                                                    "%inactive"
+                                                  "prim": "or",
+                                                  "args": [
+                                                    {
+                                                      "prim": "unit",
+                                                      "annots": [
+                                                        "%expired"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "prim": "unit",
+                                                      "annots": [
+                                                        "%inactive"
+                                                      ]
+                                                    }
                                                   ]
                                                 }
+                                              ],
+                                              "annots": [
+                                                "%state"
                                               ]
                                             }
-                                          ],
-                                          "annots": [
-                                            "%state"
                                           ]
                                         }
                                       ]
@@ -183,11 +193,31 @@
                             }
                           ]
                         }
+                      ],
+                      "annots": [
+                        "%options"
+                      ]
+                    },
+                    {
+                      "prim": "pair",
+                      "args": [
+                        {
+                          "prim": "address",
+                          "annots": [
+                            "%normalizer"
+                          ]
+                        },
+                        {
+                          "prim": "string",
+                          "annots": [
+                            "%asset"
+                          ]
+                        }
+                      ],
+                      "annots": [
+                        "%harbinger"
                       ]
                     }
-                  ],
-                  "annots": [
-                    "%options"
                   ]
                 }
               ]
@@ -204,16 +234,103 @@
             "prim": "UNPAIR"
           },
           {
-            "prim": "SWAP"
-          },
-          {
             "prim": "DUP"
           },
           {
-            "prim": "DUG",
+            "prim": "CAR"
+          },
+          {
+            "prim": "IF_NONE",
+            "args": [
+              [
+                {
+                  "prim": "SWAP"
+                },
+                {
+                  "prim": "DUP"
+                },
+                {
+                  "prim": "DUG",
+                  "args": [
+                    {
+                      "int": "2"
+                    }
+                  ]
+                },
+                {
+                  "prim": "GET",
+                  "args": [
+                    {
+                      "int": "6"
+                    }
+                  ]
+                },
+                {
+                  "prim": "DUP"
+                },
+                {
+                  "prim": "CAR"
+                },
+                {
+                  "prim": "SWAP"
+                },
+                {
+                  "prim": "CDR"
+                },
+                {
+                  "prim": "VIEW",
+                  "args": [
+                    {
+                      "string": "getPrice"
+                    },
+                    {
+                      "prim": "pair",
+                      "args": [
+                        {
+                          "prim": "timestamp"
+                        },
+                        {
+                          "prim": "nat"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "prim": "IF_NONE",
+                  "args": [
+                    [
+                      {
+                        "prim": "PUSH",
+                        "args": [
+                          {
+                            "prim": "string"
+                          },
+                          {
+                            "string": "Unable to load actual price from oracle"
+                          }
+                        ]
+                      },
+                      {
+                        "prim": "FAILWITH"
+                      }
+                    ],
+                    [
+                      {
+                        "prim": "CDR"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              []
+            ]
+          },
+          {
+            "prim": "DUP",
             "args": [
               {
-                "int": "2"
+                "int": "3"
               }
             ]
           },
@@ -226,16 +343,10 @@
             ]
           },
           {
-            "prim": "SWAP"
-          },
-          {
-            "prim": "DUP"
-          },
-          {
-            "prim": "DUG",
+            "prim": "DUP",
             "args": [
               {
-                "int": "2"
+                "int": "3"
               }
             ]
           },
@@ -248,7 +359,7 @@
             ]
           },
           {
-            "prim": "DUP",
+            "prim": "DIG",
             "args": [
               {
                 "int": "3"
@@ -270,9 +381,6 @@
                 "int": "3"
               }
             ]
-          },
-          {
-            "prim": "CAR"
           },
           {
             "prim": "PAIR",
@@ -727,7 +835,7 @@
                   "prim": "GET",
                   "args": [
                     {
-                      "int": "4"
+                      "int": "5"
                     }
                   ]
                 },
@@ -760,7 +868,7 @@
                   "prim": "UPDATE",
                   "args": [
                     {
-                      "int": "4"
+                      "int": "5"
                     }
                   ]
                 },
@@ -797,5 +905,5 @@
     }
   ],
   "networks": {},
-  "compiler": "ligo:0.35.0"
+  "compiler": "ligo:0.36.0"
 }

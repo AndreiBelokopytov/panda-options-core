@@ -1,0 +1,111 @@
+{
+  "michelson": [
+    {
+      "prim": "parameter",
+      "args": [
+        {
+          "prim": "unit"
+        }
+      ]
+    },
+    {
+      "prim": "storage",
+      "args": [
+        {
+          "prim": "big_map",
+          "args": [
+            {
+              "prim": "string"
+            },
+            {
+              "prim": "pair",
+              "args": [
+                {
+                  "prim": "timestamp"
+                },
+                {
+                  "prim": "nat"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "prim": "code",
+      "args": [
+        [
+          {
+            "prim": "CDR"
+          },
+          {
+            "prim": "NIL",
+            "args": [
+              {
+                "prim": "operation"
+              }
+            ]
+          },
+          {
+            "prim": "PAIR"
+          }
+        ]
+      ]
+    },
+    {
+      "prim": "view",
+      "args": [
+        {
+          "string": "getPrice"
+        },
+        {
+          "prim": "string"
+        },
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "timestamp"
+            },
+            {
+              "prim": "nat"
+            }
+          ]
+        },
+        [
+          {
+            "prim": "UNPAIR"
+          },
+          {
+            "prim": "GET"
+          },
+          {
+            "prim": "IF_NONE",
+            "args": [
+              [
+                {
+                  "prim": "PUSH",
+                  "args": [
+                    {
+                      "prim": "string"
+                    },
+                    {
+                      "string": "Asset doesn't exist in the normalizer"
+                    }
+                  ]
+                },
+                {
+                  "prim": "FAILWITH"
+                }
+              ],
+              []
+            ]
+          }
+        ]
+      ]
+    }
+  ],
+  "networks": {},
+  "compiler": "ligo:0.36.0"
+}
